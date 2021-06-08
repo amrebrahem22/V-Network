@@ -9,6 +9,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+#theme {
+  display: none
+}
+
 #theme:checked ~ .App {
   filter: invert(1)
 }
