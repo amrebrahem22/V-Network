@@ -31,3 +31,6 @@
 
 /* AUTH STYLES */
 @import url('./styles/auth.css');
+
+/* LOADING STYLES */
+@import url('./styles/loading.css');
