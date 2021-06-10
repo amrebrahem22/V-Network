@@ -23,9 +23,8 @@ mongoose.connect(URI, {
     console.log('Connected To MongoDB');
 })
 
-app.get('/', (req, res) => {
-    res.json({msg: 'Hell on Server.js'})
-})
+// Routes
+app.use('/api', require('./routes/authRouter'));
 
 const port = process.env.PORT || 5000;
 
