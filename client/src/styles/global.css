@@ -34,10 +34,10 @@ img {
 }
 
 /* AUTH STYLES */
-@import url("./styles/auth.css");
+@import url("./auth.css");
 
 /* LOADING STYLES */
-@import url("./styles/loading.css");
+@import url("./loading.css");
 
 /* -------- Avatar ---------- */
-@import url("./styles/avatar.css");
+@import url("./avatar.css");
