@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import Menu from './Menu'
+import Search from './Search'
 
 const Header = () => {
 
@@ -15,6 +16,8 @@ const Header = () => {
                         V-Network
                     </h1>
                 </Link>
+
+                <Search />
 
                 <Menu />
             </nav>
