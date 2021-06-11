@@ -1,36 +1,43 @@
 * {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+		"Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+		"Helvetica Neue", sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 #theme {
-  display: none
+	display: none;
 }
 
 #theme:checked ~ .App {
-  filter: invert(1)
+	filter: invert(1);
 }
 
 .App {
-  width: 100%;
-  min-height: 100vh;
-  background: #fff;
+	width: 100%;
+	min-height: 100vh;
+	background: #fff;
 }
 
 .main {
-  max-width: 1000px;
-  width: 100%;
-  margin: auto
+	max-width: 1000px;
+	width: 100%;
+	margin: auto;
+}
+
+img {
+	object-fit: cover;
 }
 
 /* AUTH STYLES */
-@import url('./styles/auth.css');
+@import url("./styles/auth.css");
 
 /* LOADING STYLES */
-@import url('./styles/loading.css');
+@import url("./styles/loading.css");
+
+/* -------- Avatar ---------- */
+@import url("./styles/avatar.css");

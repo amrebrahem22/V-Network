@@ -1,5 +1,6 @@
 const GLOBAL_TYPES = {
     AUTH: 'AUTH',
-    ALERT: 'ALERT'
+    ALERT: 'ALERT',
+    THEME: 'THEME',
 }
 export default GLOBAL_TYPES
