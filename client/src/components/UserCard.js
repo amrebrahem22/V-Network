@@ -2,14 +2,14 @@ import React from 'react'
 import Avatar from './Avatar'
 import { Link } from 'react-router-dom'
 
-const UserCard = ({user}) => {
+const UserCard = ({user, handleClose}) => {
 
 
 
     return (
         <div className={`d-flex p-2 align-items-center justify-content-between w-100`}>
             <div>
-                <Link to={`/profile/${user._id}`}
+                <Link to={`/profile/${user._id}`} onClick={handleClose}
                 className="d-flex align-items-center">
                     
                     <Avatar src={user.avatar} size="big-avatar" />

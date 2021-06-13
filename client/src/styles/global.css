@@ -45,6 +45,9 @@ img {
 /* -------- Header ---------- */
 @import url("./header.css");
 
+/* -------- Header ---------- */
+@import url("./profile.css");
+
 
 /* --------- Responsive ------ */
 @media (max-width: 766px){

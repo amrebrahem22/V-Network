@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { getDataAPI } from '../../utils/fetchData'
 import GLOBAL_TYPES from '../../redux/actions/globalTypes'
 import UserCard from '../UserCard'
+import LoadIcon from '../../images/loading.gif'
 
 const Search = () => {
     const [search, setSearch] = useState('')
@@ -10,6 +11,7 @@ const Search = () => {
 
     const { auth } = useSelector(state => state)
     const dispatch = useDispatch()
+    const [load, setLoad] = useState(false)
 
 
     const handleSearch = async (e) => {
@@ -17,8 +19,10 @@ const Search = () => {
         if(!search) return;
 
         try {
+            setLoad(true)
             const res = await getDataAPI(`search?username=${search}`, auth.token)
             setUsers(res.data.users)
+            setLoad(false)
         } catch (err) {
             dispatch({
                 type: GLOBAL_TYPES.ALERT, payload: {error: err.response.data.msg}
@@ -47,6 +51,8 @@ const Search = () => {
             </div>
 
             <button type="submit" style={{display: 'none'}}>Search</button>
+
+            { load && <img className="loading" src={LoadIcon} alt="loading"  /> }
 
             <div className="users">
                 {
