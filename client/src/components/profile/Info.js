@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import Avatar from '../Avatar'
+import EditProfile from './EditProfile'
+import FollowBtn from '../FollowBtn'
 import { getProfileUsers } from '../../redux/actions/profileAction'
 
 const Info = () => {
     const { profile, auth } = useSelector(state => state)
     const dispatch = useDispatch()
     const [userData, setUserData] = useState([])
+    const [onEdit, setOnEdit] = useState(false)    
 
     const { id } = useParams()
 
@@ -16,6 +19,9 @@ const Info = () => {
             setUserData([auth.user])
         }else{
             dispatch(getProfileUsers({users: profile.users, id, auth}))
+            const newData = profile.users.filter(user => user._id === id)
+            console.log(profile.users)
+            setUserData(newData)
         }
     }, [id, auth, dispatch, profile.users])
     
@@ -30,11 +36,15 @@ const Info = () => {
                         <div className="info_content">
                             <div className="info_content_title">
                                 <h2>{user.username}</h2>
-                                <button className="btn btn-outline-info">
-                                    Edit Profile
-                                </button>
-                               
-                                
+                                {
+                                    user._id === auth.user._id
+                                    ?  <button className="btn btn-outline-info"
+                                    onClick={() => setOnEdit(true)}>
+                                        Edit Profile
+                                    </button>
+                                    
+                                    : <FollowBtn user={user} />
+                                }
                             </div>
 
                             <div className="follow_btn">
@@ -54,6 +64,10 @@ const Info = () => {
                             </a>
                             <p>{user.story}</p>
                         </div>
+
+                        {
+                            onEdit && <EditProfile setOnEdit={setOnEdit} />
+                        }
                     </div>
                 ))
             }
