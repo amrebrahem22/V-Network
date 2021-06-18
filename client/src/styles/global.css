@@ -48,6 +48,12 @@ img {
 /* -------- Header ---------- */
 @import url("./profile.css");
 
+/* -------- Status ---------- */
+@import url("./status_modal.css");
+
+/* -------- Home ---------- */
+@import url("./home.css");
+
 
 /* --------- Responsive ------ */
 @media (max-width: 766px){
