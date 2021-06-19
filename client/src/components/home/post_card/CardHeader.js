@@ -1,6 +1,6 @@
 import React from 'react'
 import Avatar from '../../Avatar'
-import { Link, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import moment from 'moment'
 import GLOBAL_TYPES from '../../../redux/actions/globalTypes'
@@ -8,6 +8,15 @@ import GLOBAL_TYPES from '../../../redux/actions/globalTypes'
 const CardHeader = ({post}) => {
     const { auth } = useSelector(state => state)
     const dispatch = useDispatch()
+
+
+    const handleEditPost = () => {
+        dispatch({ type: GLOBAL_TYPES.STATUS, payload: {...post, onEdit: true}})
+    }
+
+    const handleCopyLink = () => {
+        // navigator.clipboard.writeText(`${BASE_URL}/post/${post._id}`)
+    }
 
     return (
         <div className="card_header">
@@ -35,16 +44,16 @@ const CardHeader = ({post}) => {
                     {
                         auth.user._id === post.user._id &&
                         <>
-                            <div className="dropdown-item">
+                            <div className="dropdown-item" onClick={handleEditPost}>
                                 <span className="material-icons">create</span> Edit Post
                             </div>
-                            <div className="dropdown-item" >
+                            <div className="dropdown-item">
                                 <span className="material-icons">delete_outline</span> Remove Post
                             </div>
                         </>
                     }
 
-                    <div className="dropdown-item">
+                    <div className="dropdown-item" onClick={handleCopyLink}>
                         <span className="material-icons">content_copy</span> Copy Link
                     </div>
                 </div>

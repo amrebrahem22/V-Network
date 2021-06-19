@@ -1,10 +1,10 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import GLOBAL_TYPES from '../redux/actions/globalTypes'
-import { createPost } from '../redux/actions/postAction'
+import { createPost, updatePost } from '../redux/actions/postAction'
 
 const StatusModal = () => {
-    const { auth, theme } = useSelector(state => state)
+    const { auth, theme, status } = useSelector(state => state)
     const dispatch = useDispatch()
 
     const [content, setContent] = useState('')
@@ -79,7 +79,11 @@ const StatusModal = () => {
             type: GLOBAL_TYPES.ALERT, payload: {error: "Please add your photo."}
         })
 
-        dispatch(createPost({content, images, auth}))
+        if(status.onEdit){
+            dispatch(updatePost({content, images, auth, status}))
+        }else{
+            dispatch(createPost({content, images, auth}))
+        }
         
 
         setContent('')
@@ -87,6 +91,13 @@ const StatusModal = () => {
         if(tracks) tracks.stop()
         dispatch({ type: GLOBAL_TYPES.STATUS, payload: false})
     }
+
+    useEffect(() => {
+        if(status.onEdit){
+            setContent(status.content)
+            setImages(status.images)
+        }
+    },[status])
    
 
     return (
