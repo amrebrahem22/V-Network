@@ -1,23 +1,24 @@
-import React from 'react'
+import React , {useState} from 'react'
 import { useSelector } from 'react-redux'
-import CardHeader from './post_card/CardHeader'
-import CardBody from './post_card/CardBody'
-import CardFooter from './post_card/CardFooter'
+import PostCard from '../PostCard'
+import LoadIcon from '../../images/loading.gif'
 
 const Posts = () => {
 
-    const { homePosts } = useSelector(state => state)
+    const [load, setLoad] = useState(false)
+
+    const { homePosts, theme } = useSelector(state => state)
 
     return (
         <div className="posts">
             {
                 homePosts.posts.map(post => (
-                    <div key={post._id} className="card my-3" >
-                        <CardHeader post={post} />
-                        <CardBody post={post} />
-                        <CardFooter post={post} />
-                    </div>
+                    <PostCard key={post._id} post={post} theme={theme} />
                 ))
+            }
+
+            {
+                load && <img src={LoadIcon} alt="loading" className="d-block mx-auto" />
             }
         </div>
     )

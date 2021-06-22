@@ -54,6 +54,9 @@ img {
 /* -------- Home ---------- */
 @import url("./home.css");
 
+/* -------- Comment ---------- */
+@import url("./comment.css");
+
 
 /* --------- Responsive ------ */
 @media (max-width: 766px){
