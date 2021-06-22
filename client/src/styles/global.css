@@ -57,6 +57,9 @@ img {
 /* -------- Comment ---------- */
 @import url("./comment.css");
 
+/* -------- post_thumb ---------- */
+@import url("./post_thumb.css");
+
 
 /* --------- Responsive ------ */
 @media (max-width: 766px){

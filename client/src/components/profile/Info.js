@@ -9,27 +9,22 @@ import Following from './Following'
 import { getProfileUsers } from '../../redux/actions/profileAction'
 import GLOBAL_TYPES from '../../redux/actions/globalTypes'
 
-const Info = () => {
-    const { profile, auth } = useSelector(state => state)
-    const dispatch = useDispatch()
+const Info = ({id, auth, profile, dispatch}) => {
     const [userData, setUserData] = useState([])
-    const [onEdit, setOnEdit] = useState(false)    
+    const [onEdit, setOnEdit] = useState(false)
 
     const [showFollowers, setShowFollowers] = useState(false)
     const [showFollowing, setShowFollowing] = useState(false)
-
-    const { id } = useParams()
 
     useEffect(() => {
         if(id === auth.user._id){
             setUserData([auth.user])
         }else{
-            dispatch(getProfileUsers({users: profile.users, id, auth}))
             const newData = profile.users.filter(user => user._id === id)
-            console.log(profile.users)
             setUserData(newData)
         }
     }, [id, auth, dispatch, profile.users])
+
 
     useEffect(() => {
         if(showFollowers || showFollowing || onEdit){
