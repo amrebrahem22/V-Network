@@ -1,6 +1,6 @@
 import GLOBAL_TYPES from './globalTypes'
 import { imageUpload } from '../../utils/imageUpload'
-import { postDataAPI, getDataAPI, patchDataAPI } from '../../utils/fetchData'
+import { postDataAPI, getDataAPI, patchDataAPI, deleteDataAPI } from '../../utils/fetchData'
 
 export const POST_TYPES = {
     CREATE_POST: 'CREATE_POST',
@@ -8,6 +8,7 @@ export const POST_TYPES = {
     GET_POSTS: 'GET_POSTS',
     UPDATE_POST: 'UPDATE_POST',
     GET_POST: 'GET_POST',
+    DELETE_POST: 'DELETE_POST',
 }
 
 
@@ -123,5 +124,19 @@ export const getPost = ({detailPost, id, auth}) => async (dispatch) => {
                 payload: {error: err.response.data.msg}
             })
         }
+    }
+}
+
+export const deletePost = ({post, auth}) => async (dispatch) => {
+    dispatch({ type: POST_TYPES.DELETE_POST, payload: post })
+
+    try {
+        const res = await deleteDataAPI(`post/${post._id}`, auth.token)
+        
+    } catch (err) {
+        dispatch({
+            type: GLOBAL_TYPES.ALERT,
+            payload: {error: err.response.data.msg}
+        })
     }
 }
