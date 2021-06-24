@@ -10,6 +10,11 @@ const commentCtrl = {
             const post = await Posts.findById(postId)
             if(!post) return res.status(400).json({msg: "This post does not exist."})
 
+            if(reply){
+                const cm = await Comments.findById(reply)
+                if(!cm) return res.status(400).json({msg: "This comment does not exist."})
+            }
+
             const newComment = new Comments({
                 user: req.user._id, content, tag, reply, postUserId, postId
             })

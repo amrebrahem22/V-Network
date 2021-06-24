@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { useParams } from 'react-router-dom'
 import Avatar from '../Avatar'
 import EditProfile from './EditProfile'
 import FollowBtn from '../FollowBtn'
 import Followers from './Followers'
 import Following from './Following'
-import { getProfileUsers } from '../../redux/actions/profileAction'
 import GLOBAL_TYPES from '../../redux/actions/globalTypes'
 
 const Info = ({id, auth, profile, dispatch}) => {

@@ -12,6 +12,7 @@ import {refreshToken} from './redux/actions/authActions'
 import Header from './components/Header/Header'
 import StatusModal from './components/StatusModal'
 import { getPosts } from './redux/actions/postAction'
+import { getSuggestions } from './redux/actions/suggestionsAction'
 
 function App() {
   const { auth, status, modal } = useSelector(state => state);
@@ -25,6 +26,7 @@ function App() {
   useEffect(() => {
     if(auth.token) {
       dispatch(getPosts(auth.token))
+      dispatch(getSuggestions(auth.token))
     }
   }, [dispatch, auth.token])
 
