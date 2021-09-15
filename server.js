@@ -3,12 +3,21 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const SocketServer = require('./socketServer')
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
+
+// Socket
+const http = require('http').createServer(app);
+const io = require('socket.io')(http)
+
+io.on('connection', socket => {
+    SocketServer(socket)
+})
 
 // Connect to Mongo
 const URI = process.env.MONGO_URL;
@@ -31,4 +40,4 @@ app.use('/api', require('./routes/commentRouter'))
 
 const port = process.env.PORT || 5000;
 
-app.listen(port, () => console.log(`Server Running on Port ${port}`))
+http.listen(port, () => console.log(`Server Running on Port ${port}`))

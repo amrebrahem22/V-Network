@@ -73,7 +73,7 @@ const postCtrl = {
 
             const post = await Posts.findOneAndUpdate({_id: req.params.id}, {
                 content, images
-            }).populate("user likes", "avatar username fullname")
+            }).populate("user likes", "avatar username fullname followers")
 
             res.json({
                 msg: "Updated Post!",

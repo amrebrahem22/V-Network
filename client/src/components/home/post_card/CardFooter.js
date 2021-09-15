@@ -17,7 +17,7 @@ const CardFooter = ({post}) => {
     const [saved, setSaved] = useState(false)
     const [saveLoad, setSaveLoad] = useState(false)
 
-    const { auth, theme } = useSelector(state => state)
+    const { auth, theme, socket } = useSelector(state => state)
     const dispatch = useDispatch()
 
     // Likes
@@ -33,7 +33,7 @@ const CardFooter = ({post}) => {
         if(loadLike) return;
         
         setLoadLike(true)
-        await dispatch(likePost({post, auth}))
+        await dispatch(likePost({post, auth, socket}))
         setLoadLike(false)
     }
 
@@ -41,7 +41,7 @@ const CardFooter = ({post}) => {
         if(loadLike) return;
 
         setLoadLike(true)
-        await dispatch(unLikePost({post, auth}))
+        await dispatch(unLikePost({post, auth, socket}))
         setLoadLike(false)
     }
 
