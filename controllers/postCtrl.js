@@ -180,7 +180,7 @@ const postCtrl = {
     deletePost: async (req, res) => {
         try {
             const post = await Posts.findOneAndDelete({_id: req.params.id, user: req.user._id})
-            await Comments.deleteMany({_id: {$in: post.comments }})
+            post.comments.length > 0 && await Comments.deleteMany({_id: {$in: post.comments }})
 
             res.json({
                 msg: 'Deleted Post!',
