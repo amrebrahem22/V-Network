@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { logout } from '../../redux/actions/authActions'
 import GLOBAL_TYPES from '../../redux/actions/globalTypes'
 import Avatar from '../Avatar'
+import NotifyModal from '../NotifyModal'
 
 const Menu = () => {
     const navLinks = [
@@ -12,7 +13,7 @@ const Menu = () => {
         { label: 'Discover', icon: 'explore', path: '/discover'}
     ]
 
-    const { auth, theme } = useSelector(state => state)
+    const { auth, theme, notify } = useSelector(state => state)
     const dispatch = useDispatch()
     const { pathname } = useLocation()
 
@@ -37,11 +38,17 @@ const Menu = () => {
                     <span className="nav-link position-relative" id="navbarDropdown" 
                     role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 
-                        <span className="material-icons" >
+                        <span className="material-icons" style={{color: notify.data.length > 0 ? 'crimson': ''}}>
                             favorite
                         </span>
 
+                        <span className='notify_length'>{notify.data.length}</span>
+
+
                     </span>
+                    <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <NotifyModal />
+                    </div>
                         
                 </li>
            
@@ -53,25 +60,25 @@ const Menu = () => {
                     </span>
 
                     <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <Link className="dropdown-item" to={`/profile/${auth.user._id}`}>Profile</Link>
+                        <Link className="dropdown-item" to={`/profile/${auth.user._id}`}>Profile</Link>
 
-                    <label htmlFor="theme" className="dropdown-item"
-                    onClick={() => dispatch({
-                        type: GLOBAL_TYPES.THEME, payload: !theme
-                    })}>
+                        <label htmlFor="theme" className="dropdown-item"
+                        onClick={() => dispatch({
+                            type: GLOBAL_TYPES.THEME, payload: !theme
+                        })}>
 
-                        {theme ? 'Light mode' : 'Dark mode'}
-                    </label>
+                            {theme ? 'Light mode' : 'Dark mode'}
+                        </label>
 
-                    <div className="dropdown-divider"></div>
-                    <Link className="dropdown-item" to="/"
-                    onClick={() => dispatch(logout())}>
-                        Logout
-                    </Link>
-                </div>
-            </li>
-        </ul>
-    </div>
+                        <div className="dropdown-divider"></div>
+                        <Link className="dropdown-item" to="/"
+                        onClick={() => dispatch(logout())}>
+                            Logout
+                        </Link>
+                    </div>
+                </li>
+            </ul>
+        </div>
 
     )
 }
