@@ -42,7 +42,7 @@ const Menu = () => {
                             favorite
                         </span>
 
-                        <span className='notify_length'>{notify.data.length}</span>
+                        <span className='notify_length'>{notify.data.filter(item => item.isRead === false).length}</span>
 
 
                     </span>
