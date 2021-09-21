@@ -60,6 +60,9 @@ img {
 /* -------- post_thumb ---------- */
 @import url("./post_thumb.css");
 
+/* -------- message ---------- */
+@import url("./message.css");
+
 
 /* --------- Responsive ------ */
 @media (max-width: 766px){
