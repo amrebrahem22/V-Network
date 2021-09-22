@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import GLOBAL_TYPES from '../redux/actions/globalTypes'
 import { createPost, updatePost } from '../redux/actions/postAction'
+import { imageShow, videoShow } from '../utils/mediaShow'
+import Icons from './Icons'
 
 const StatusModal = () => {
     const { auth, theme, status, socket } = useSelector(state => state)
@@ -124,17 +126,30 @@ const StatusModal = () => {
 
                     <div className="d-flex">
                         <div className="flex-fill"></div>
+                        <Icons setContent={setContent} content={content} theme={theme} />
                     </div>
 
                     <div className="show_images">
-                        {
+                    {
                             images.map((img, index) => (
                                 <div key={index} id="file_img">
                                     {
-                                        img.camera ? <img src={img.camera} alt="images" className="img-thumbnail"
-                                            style={{filter: theme ? 'invert(1)' : 'invert(0)'}} />
-                                        : <img src={img.url} alt="images" className="img-thumbnail"
-                                            style={{filter: theme ? 'invert(1)' : 'invert(0)'}} />
+                                        img.camera ? imageShow(img.camera, theme)
+                                        : img.url
+                                            ?<>
+                                                {
+                                                    img.url.match(/video/i)
+                                                    ? videoShow(img.url, theme) 
+                                                    : imageShow(img.url, theme)
+                                                }
+                                            </>
+                                            :<>
+                                                {
+                                                    img.type.match(/video/i)
+                                                    ? videoShow(URL.createObjectURL(img), theme) 
+                                                    : imageShow(URL.createObjectURL(img), theme)
+                                                }
+                                            </>
                                     }
                                     <span onClick={() => deleteImages(index)}>&times;</span>
                                 </div>

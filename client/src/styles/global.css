@@ -63,6 +63,9 @@ img {
 /* -------- message ---------- */
 @import url("./message.css");
 
+/* -------- icons ---------- */
+@import url("./icons.css");
+
 
 /* --------- Responsive ------ */
 @media (max-width: 766px){
