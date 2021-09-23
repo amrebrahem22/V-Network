@@ -1,7 +1,12 @@
 import React from 'react'
 import Avatar from '../Avatar'
+import { imageShow, videoShow } from '../../utils/mediaShow'
+import { useSelector } from 'react-redux'
 
-const MsgDisplay = ({user}) => {
+const MsgDisplay = ({user, msg, theme}) => {
+
+    const { auth } = useSelector(state => state)
+    
     return (
         <>
             <div className="chat_title">
@@ -10,13 +15,37 @@ const MsgDisplay = ({user}) => {
             </div>
 
             <div className="you_content">
-                <div className="chat_text">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam ullam atque quod exercitationem reprehenderit sunt cumque consectetur eius, natus
+                { 
+                    user._id === auth.user._id && 
+                    <i className="fas fa-trash text-danger"/>
+                }
+
+                <div>
+                    {
+                        msg.text && 
+                        <div className="chat_text"
+                        style={{filter: theme ? 'invert(1)' : 'invert(0)'}}>
+                            {msg.text}
+                        </div>
+                    }
+                    {
+                        msg.media.map((item, index) => (
+                            <div key={index}>
+                                {
+                                    item.url.match(/video/i)
+                                    ? videoShow(item.url, theme)
+                                    : imageShow(item.url, theme)
+                                }
+                            </div>
+                        ))
+                    }
                 </div>
+            
             </div>
 
+
             <div className="chat_time">
-                10 Minutes ago
+                {new Date(msg.createdAt).toLocaleString()}
             </div>
         </>
     )
