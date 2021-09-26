@@ -7,7 +7,7 @@ import Icons from '../Icons'
 import GLOBAL_TYPES from '../../redux/actions/globalTypes'
 import { imageShow, videoShow } from '../../utils/mediaShow'
 import { imageUpload } from '../../utils/imageUpload'
-import { addMessage, getMessages, MESS_TYPES } from '../../redux/actions/messageAction'
+import { addMessage, getMessages, loadMoreMessages} from '../../redux/actions/messageAction'
 import LoadIcon from '../../images/loading.gif'
 
 const RightSide = () => {
@@ -20,26 +20,36 @@ const RightSide = () => {
     const [media, setMedia] = useState([])
     const [loadMedia, setLoadMedia] = useState(false)
 
-    const [data, setData] = useState([])
-
     const refDisplay = useRef()
     const pageEnd = useRef()
 
+    const [data, setData] = useState([])
+    const [result, setResult] = useState(9)
     const [page, setPage] = useState(0)
+    const [isLoadMore, setIsLoadMore] = useState(0)
 
     const history = useHistory()
 
     useEffect(() => {
-        const newData = message.data.filter(item => item.sender === auth.user._id || item.sender === id)
-        setData(newData)
-    },[message.data, id, auth.user._id])
-    
-    useEffect(() => {
-        const newData = message.users.find(user => user._id === id)
+        const newData = message.data.find(item => item._id === id)
         if(newData){
-            setUser(newData)
+            setData(newData.messages)
+            setResult(newData.result)
+            setPage(newData.page)
         }
     },[message.data, id])
+    
+    useEffect(() => {
+        if (id && message.users.length > 0) {
+            setTimeout(() => {
+                refDisplay.current.scrollIntoView({behavior: 'smooth', block: 'end'})
+            }, 50)
+            const newData = message.users.find(user => user._id === id)
+            if(newData){
+                setUser(newData)
+            }
+        }
+    },[message.users, id])
 
     const handleChangeMedia = (e) => {
         const files = [...e.target.files]
@@ -92,44 +102,40 @@ const RightSide = () => {
     }
 
     useEffect(() => {
-        if(id) {
-            const getMessagesData  = async () => {
-                dispatch({ type: MESS_TYPES.GET_MESSAGES, payload: {messages: []}})
-                setPage(1)
+        const getMessagesData = async () => {
+            if(message.data.every(item => item._id !== id)){
                 await dispatch(getMessages({auth, id}))
-
-                if (refDisplay.current) {
+                setTimeout(() => {
                     refDisplay.current.scrollIntoView({behavior: 'smooth', block: 'end'})
-                }
+                },50)
             }
-            getMessagesData()
         }
-    },[id, dispatch, auth])
+        getMessagesData()
+    },[id, dispatch, auth, message.data])
 
     // Load More
     useEffect(() => {
         const observer = new IntersectionObserver(entries => {
             if(entries[0].isIntersecting){
-                setPage(p => p + 1)
+                setIsLoadMore(p => p + 1)
             }
         },{
             threshold: 0.1
         })
 
         observer.observe(pageEnd.current)
-    },[setPage])
+    },[setIsLoadMore])
 
     useEffect(() => {
-        if(message.resultData >= (page - 1) * 9 && page > 1) {
-            dispatch(getMessages({auth, id, page}))
+        if(isLoadMore > 1){
+            if(result >= page * 9){
+                dispatch(loadMoreMessages({auth, id, page: page + 1}))
+                setIsLoadMore(1)
+            }
         }
-    }, [message.resultData, page, id, auth, dispatch])
+        // eslint-disable-next-line
+    },[isLoadMore])
 
-    useEffect(() =>{
-        if (refDisplay.current) {
-            refDisplay.current.scrollIntoView({behavior: 'smooth', block: 'end'})
-        }
-    }, [text])
 
     return(
         <>
