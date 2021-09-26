@@ -7,7 +7,7 @@ import Icons from '../Icons'
 import GLOBAL_TYPES from '../../redux/actions/globalTypes'
 import { imageShow, videoShow } from '../../utils/mediaShow'
 import { imageUpload } from '../../utils/imageUpload'
-import { addMessage, getMessages } from '../../redux/actions/messageAction'
+import { addMessage, getMessages, MESS_TYPES } from '../../redux/actions/messageAction'
 import LoadIcon from '../../images/loading.gif'
 
 const RightSide = () => {
@@ -22,8 +22,18 @@ const RightSide = () => {
 
     const [data, setData] = useState([])
 
+    const refDisplay = useRef()
+    const pageEnd = useRef()
+
+    const [page, setPage] = useState(0)
+
     const history = useHistory()
 
+    useEffect(() => {
+        const newData = message.data.filter(item => item.sender === auth.user._id || item.sender === id)
+        setData(newData)
+    },[message.data, id, auth.user._id])
+    
     useEffect(() => {
         const newData = message.users.find(user => user._id === id)
         if(newData){
@@ -76,16 +86,50 @@ const RightSide = () => {
 
         setLoadMedia(false)
         await dispatch(addMessage({msg, auth, socket}))
+        if(refDisplay.current){
+            refDisplay.current.scrollIntoView({behavior: 'smooth', block: 'end'})
+        }
     }
 
     useEffect(() => {
-        const getMessagesData = async () => {
-            if(message.data.every(item => item._id !== id)){
+        if(id) {
+            const getMessagesData  = async () => {
+                dispatch({ type: MESS_TYPES.GET_MESSAGES, payload: {messages: []}})
+                setPage(1)
                 await dispatch(getMessages({auth, id}))
+
+                if (refDisplay.current) {
+                    refDisplay.current.scrollIntoView({behavior: 'smooth', block: 'end'})
+                }
             }
+            getMessagesData()
         }
-        getMessagesData()
-    },[id, dispatch, auth, message.data])
+    },[id, dispatch, auth])
+
+    // Load More
+    useEffect(() => {
+        const observer = new IntersectionObserver(entries => {
+            if(entries[0].isIntersecting){
+                setPage(p => p + 1)
+            }
+        },{
+            threshold: 0.1
+        })
+
+        observer.observe(pageEnd.current)
+    },[setPage])
+
+    useEffect(() => {
+        if(message.resultData >= (page - 1) * 9 && page > 1) {
+            dispatch(getMessages({auth, id, page}))
+        }
+    }, [message.resultData, page, id, auth, dispatch])
+
+    useEffect(() =>{
+        if (refDisplay.current) {
+            refDisplay.current.scrollIntoView({behavior: 'smooth', block: 'end'})
+        }
+    }, [text])
 
     return(
         <>
@@ -106,13 +150,13 @@ const RightSide = () => {
 
             <div className="chat_container" 
             style={{height: media.length > 0 ? 'calc(100% - 180px)' : ''}} >
-                <div className="chat_display">
-                    <button style={{marginTop: '-25px', opacity: 0}}>
+                <div className="chat_display" ref={refDisplay}>
+                    <button style={{marginTop: '-25px', opacity: 0}} ref={pageEnd}>
                         Load more
                     </button>
 
                     {
-                        message.data.map((msg, index) => (
+                        data.map((msg, index) => (
                                 <div key={index}>
                                     {
                                         msg.sender !== auth.user._id &&
@@ -141,7 +185,6 @@ const RightSide = () => {
 
                 </div>
             </div>
-
             <div className="show_media" style={{display: media.length > 0 ? 'grid' : 'none'}} >
                 {
                     media.map((item, index) => (
