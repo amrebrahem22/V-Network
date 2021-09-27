@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { POST_TYPES } from './redux/actions/postAction';
 import GLOBAL_TYPES from './redux/actions/globalTypes';
 import {NOTIFY_TYPES} from './redux/actions/notifyAction';
+import {MESS_TYPES} from './redux/actions/messageAction';
 import audioBell from './audio/got-it-done-613.mp3'
 
 const spawnNotification = (body, icon, url, title) => {
@@ -110,6 +111,15 @@ const SocketClient = () => {
     useEffect(() => {
         socket.on('addMessageToClient', msg =>{
             dispatch({type: MESS_TYPES.ADD_MESSAGE, payload: msg})
+
+            dispatch({
+                type: MESS_TYPES.ADD_USER, 
+                payload: {
+                    ...msg.user, 
+                    text: msg.text, 
+                    media: msg.media
+                }
+            })
 
         })
 

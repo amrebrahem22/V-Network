@@ -7,17 +7,10 @@ export const MESS_TYPES = {
     GET_CONVERSATIONS: 'GET_CONVERSATIONS',
     GET_MESSAGES: 'GET_MESSAGES',
     UPDATE_MESSAGES: 'UPDATE_MESSAGES',
-    DELETE_MESSAGES: 'DELETE_MESSAGES'
+    DELETE_MESSAGES: 'DELETE_MESSAGES',
+    DELETE_CONVERSATION: 'DELETE_CONVERSATION',
 }
 
-
-
-export const addUser = ({message, user}) => async (dispatch) =>{
-    
-    if (message.users.every(item => item._id !== user._id)) {
-        dispatch({type: MESS_TYPES.ADD_USER, payload: {...user, text: '', media: []}})
-    }
-}
 
 export const addMessage = ({msg, auth, socket}) => async (dispatch) =>{
     dispatch({type: MESS_TYPES.ADD_MESSAGE, payload: msg})
@@ -82,6 +75,15 @@ export const deleteMessages = ({msg, data, auth}) => async (dispatch) => {
     dispatch({type: MESS_TYPES.DELETE_MESSAGES, payload: {newData, _id: msg.recipient}})
     try {
         await deleteDataAPI(`message/${msg._id}`, auth.token)
+    } catch (err) {
+        dispatch({type: GLOBAL_TYPES.ALERT, payload: {error: err.response.data.msg}})
+    }
+}
+
+export const deleteConversation = ({auth, id}) => async (dispatch) => {
+    dispatch({type: MESS_TYPES.DELETE_CONVERSATION, payload: id})
+    try {
+        await deleteDataAPI(`conversation/${id}`, auth.token)
     } catch (err) {
         dispatch({type: GLOBAL_TYPES.ALERT, payload: {error: err.response.data.msg}})
     }
