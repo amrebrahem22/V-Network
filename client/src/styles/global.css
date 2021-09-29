@@ -66,6 +66,9 @@ img {
 /* -------- icons ---------- */
 @import url("./icons.css");
 
+/* -------- call_modal.css ---------- */
+@import url("./call_modal.css");
+
 
 /* --------- Responsive ------ */
 @media (max-width: 766px){
