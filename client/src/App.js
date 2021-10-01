@@ -19,6 +19,7 @@ import SocketClient from './SocketClient'
 import CallModal from './components/message/CallModal'
 
 import io from 'socket.io-client'
+import Peer from 'peerjs'
 
 function App() {
   const { auth, status, modal, call } = useSelector(state => state);
@@ -53,6 +54,14 @@ function App() {
       });
     }
   },[])
+
+  useEffect(() => {
+    const newPeer = new Peer(undefined, {
+      path: '/', host: '3001'
+    })
+    
+    dispatch({ type: GLOBAL_TYPES.PEER, payload: newPeer })
+  },[dispatch])
 
   return (
     <Router>

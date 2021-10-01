@@ -7,7 +7,8 @@ const GLOBAL_TYPES = {
     SOCKET: 'SOCKET',
     ONLINE: 'ONLINE',
     OFFLINE: 'OFFLINE',
-    CALL: 'CALL'
+    CALL: 'CALL',
+    PEER: 'PEER'
 }
 
 export const EditData = (data, id, post) => {

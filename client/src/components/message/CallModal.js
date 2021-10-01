@@ -5,7 +5,7 @@ import GLOBAL_TYPES from '../../redux/actions/globalTypes'
 import { addMessage } from '../../redux/actions/messageAction'
 
 const CallModal = () => {
-    const { call } = useSelector(state => state)
+    const { call, auth, socket } = useSelector(state => state)
     const dispatch = useDispatch()
 
     const [mins, setMins] = useState(0)
@@ -33,6 +33,7 @@ const CallModal = () => {
 
     const handleEndCall = () => {
         dispatch({type: GLOBAL_TYPES.CALL, payload: null })
+        socket.emit('endCall', call)
     }
 
     useEffect(() => {
@@ -47,6 +48,14 @@ const CallModal = () => {
         }
         
     },[dispatch, answer, call])
+
+    useEffect(() => {
+        socket.on('endCallToClient', data => {
+            dispatch({ type: GLOBAL_TYPES.CALL, payload: null })
+        })
+
+        return () => socket.off('endCallToClient')
+    },[socket, dispatch])
 
     // Answer Call
     const handleAnswer = () => {
@@ -100,15 +109,20 @@ const CallModal = () => {
                     </button>
                     
                     {
-                        call.video
-                        ? <button className="material-icons text-success"
-                        onClick={handleAnswer}>
-                            videocam
-                        </button>
-                        : <button className="material-icons text-success"
-                        onClick={handleAnswer}>
-                            call
-                        </button>
+                        (call.recipient === auth.user._id && !answer) &&
+                        <>
+                            {
+                                call.video
+                                ? <button className="material-icons text-success"
+                                onClick={handleAnswer}>
+                                    videocam
+                                </button>
+                                : <button className="material-icons text-success"
+                                onClick={handleAnswer}>
+                                    call
+                                </button>
+                            }
+                        </>
                     }
                     
                 </div>
