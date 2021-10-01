@@ -30,7 +30,7 @@ const messageCtrl = {
                 ]
             }, {
                 recipients: [sender, recipient],
-                text, media
+                text, media, call
             }, { new: true, upsert: true })
 
             const newMessage = new Messages({
