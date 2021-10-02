@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const SocketServer = require('./socketServer')
-const { PeerServer } = require('peer')
+const { ExpressPeerServer } = require('peer')
 
 const app = express();
 
@@ -21,7 +21,7 @@ io.on('connection', socket => {
 })
 
 // Peer server
-PeerServer({port: 3001, path: '/' })
+ExpressPeerServer(http, {path: '/' })
 
 // Connect to Mongo
 const URI = process.env.MONGO_URL;
